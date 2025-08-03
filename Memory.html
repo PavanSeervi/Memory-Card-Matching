@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Memory Card Match Game with Instructions & Results</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <style>
+        body {
+            background: #f0f4f8;
+            user-select: none;
+        }
+
+        .card {
+            width: 90px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 2px solid #6c757d;
+            background: #f8f9fa;
+            margin: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgb(0 0 0 / 0.12);
+            transition: background 0.3s, color 0.3s, transform 0.2s;
+            border-radius: 10px;
+            color: transparent;
+            /* Hide text by default */
+            user-select: none;
+        }
+
+        .card:hover:not(.matched):not(.flipped):not(.disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgb(0 0 0 / 0.2);
+        }
+
+        .matched {
+            background: #d1ffd6 !important;
+            color: #4f8a10 !important;
+            cursor: default;
+            border-color: #4f8a10 !important;
+        }
+
+        .hidden {
+            background: #6c757d !important;
+            color: transparent !important;
+            pointer-events: auto;
+        }
+
+        .flipped {
+            color: #212529 !important;
+            background: #fffbe6 !important;
+            pointer-events: auto;
+        }
+
+        .disabled {
+            pointer-events: none !important;
+            opacity: 0.6 !important;
+            cursor: default;
+        }
+
+        button.btn {
+            min-width: 80px;
+        }
+
+        #game-board {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .difficulty-btn.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        /* Overlay for instructions & results */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #overlay.hidden {
+            display: none;
+        }
+
+        #overlay-content {
+            background: #212529;
+            border-radius: 12px;
+            padding: 30px 40px;
+            max-width: 420px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        #overlay-content h3 {
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        #overlay-content p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        #overlay-content button {
+            min-width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5">
+        <h2 class="text-center mb-4">🌟 Memory Card Match Game 🌟</h2>
+
+        <div class="text-center mb-3" id="controls" style="display:none;">
+            <div class="mb-3">
+                <button id="easy-btn" class="btn btn-outline-primary difficulty-btn me-2 active">Easy</button>
+                <button id="medium-btn" class="btn btn-outline-primary difficulty-btn me-2">Medium</button>
+                <button id="hard-btn" class="btn btn-outline-primary difficulty-btn">Hard</button>
+            </div>
+            <button id="start-btn" class="btn btn-success me-2" disabled>Start</button>
+            <button id="end-btn" class="btn btn-danger me-2" disabled>End</button>
+            <button id="hint-btn" class="btn btn-info" disabled>Hint</button>
+        </div>
+
+        <div id="game-board" class="d-flex flex-wrap justify-content-center mb-3" style="display:none;"></div>
+
+        <div class="text-center mb-2 fs-5" id="status" style="display:none;">
+            Moves: <span id="move-count">0</span>
+            &nbsp;|&nbsp; Hints left: <span id="hints-left">3</span>
+            &nbsp;|&nbsp; Time: <span id="timer">0</span>s
+        </div>
+    </div>
+
+    <!-- Overlay for instructions and results -->
+    <div id="overlay">
+        <div id="overlay-content">
+            <h3>How to Play</h3>
+            <p>Match pairs of cards by flipping them one pair at a time.</p>
+            <p>Use the "Hint" button up to 3 times for help.</p>
+            <p>Choose your difficulty level: Easy (8 pairs), Medium (12 pairs), Hard (16 pairs).</p>
+            <button id="overlay-start-btn" class="btn btn-primary mt-3">Start Game</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+
+</html>
